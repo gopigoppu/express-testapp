@@ -11,5 +11,9 @@
     "userblog"
   ],
   "author": "Gopi M",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3"
+  }
 }
