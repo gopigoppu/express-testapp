@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const postRoutes = require('./api/routes/posts');
 const commentRoutes = require('./api/routes/comments');
@@ -19,6 +20,10 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+//Mongoose connection
+// console.log(process.env.MONGODB_LOCAL_URL);
+mongoose.connect(process.env.MONGODB_LOCAL_URL);
 
 // Routes which should handle requests
 app.use('/posts', postRoutes);
