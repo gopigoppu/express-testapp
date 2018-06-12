@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const Comment = require('../models/comment');
+const Post = require('../models/post');
 
 router.get('/', (req, res, next) => {
     Comment.find()
@@ -33,13 +34,22 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    const comment = new Comment({
-        _id: new mongoose.Types.ObjectId(),
-        post_id: req.body.post_id,
-        comment_title: req.body.comment_title,
-        comment_content: req.body.comment_content
-    });
-    comment.save()
+    Post.findById(req.body.post_id)
+        .then(post => {
+            if (!post) {
+                return res.status(404).json({
+                    message: "Post not found"
+                })
+            }
+            const comment = new Comment({
+                _id: new mongoose.Types.ObjectId(),
+                post_id: req.body.post_id,
+                comment_title: req.body.comment_title,
+                comment_content: req.body.comment_content
+            });
+            return comment.save()
+
+        })
         .then(result => {
             console.log(result);
             res.status(200).json({
@@ -53,11 +63,13 @@ router.post('/', (req, res, next) => {
             });
         });
 
+
 });
 
 router.get('/:commentId', (req, res, next) => {
     const id = req.params.commentId;
     Comment.findById(id)
+        .populate('post_id', '_id post_title post_content')
         .exec()
         .then(doc => {
             // console.log(doc);
