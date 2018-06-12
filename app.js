@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const postRoutes = require('./api/routes/posts');
 const commentRoutes = require('./api/routes/comments');
+const userRoutes = require('./api/routes/users');
 
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'))
@@ -29,6 +30,7 @@ mongoose.connect(process.env.MONGODB_LOCAL_URL);
 // Routes which should handle requests
 app.use('/posts', postRoutes);
 app.use('/comments', commentRoutes);
+app.use('/user', userRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
